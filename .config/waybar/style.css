@@ -1,0 +1,152 @@
+/* Import the Matugen generated colors */
+@import "colors.css";
+
+* {
+    border: none;
+    font-family:
+        "JetBrainsMono Nerd Font", "BerkeleyMono Nerd Font", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    min-height: 0;
+    margin-top: 0;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+window#waybar.empty {
+    background-color: transparent;
+}
+
+window#waybar.empty #window {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    background-color: transparent;
+}
+
+window > box {
+    background: transparent;
+    color: @on_surface;
+}
+
+/* --- Module Group Containers --- */
+/* Using alpha() to keep your 75% transparency while using Matugen colors */
+.modules {
+    background: alpha(@surface, 0.75);
+    border: 1px;
+    border-style: none none solid none;
+    border-color: @secondary;
+    border-radius: 20px;
+}
+
+.modules-center {
+    background: alpha(@surface, 0.75);
+    margin: 20px 10px 0px 2px;
+    border: 2px;
+    border-style: none none solid none;
+    border-color: @secondary;
+    border-radius: 25px;
+}
+
+.modules-right {
+    margin: 20px 10px 0 5px;
+    background: alpha(@surface, 0.75);
+    border: 2px;
+    border-style: none none solid solid;
+    border-color: @secondary;
+    border-radius: 25px;
+}
+
+/* --- Workspaces & Taskbar --- */
+#workspaces button {
+    padding: 0px 0px;
+    background-color: transparent;
+}
+
+#workspaces button:hover {
+    box-shadow: inherit;
+    background-color: transparent;
+}
+
+/* --- Buttons & Icons --- */
+#workspaces button,
+#taskbar button,
+#custom-launcher,
+#network,
+#bluetooth,
+#custom-power,
+#custom-vertical-text {
+    padding: 5px 0px;
+    background-color: transparent;
+    color: @on_surface;
+    transition: all 0.3s ease;
+}
+
+/* --- Hover Effects --- */
+#workspaces button:hover,
+#taskbar button:hover,
+#custom-launcher:hover,
+#custom-power:hover {
+    background-color: alpha(@primary, 0.3);
+    /* Accent tint on hover */
+    border-radius: 25px;
+}
+
+/* --- Active/Focused States --- */
+#workspaces button.focused,
+#workspaces button.active {
+    background-color: alpha(@primary, 0.5);
+    color: @on_primary;
+    border-radius: 25px;
+}
+
+#taskbar button.active {
+    background-color: @primary;
+    /* Your "Purple/Secondary" accent */
+    color: @on_tertiary;
+    border-radius: 25px;
+}
+
+/* --- Specific Modules --- */
+#mode {
+    color: @primary;
+    font-weight: bold;
+}
+
+#battery.critical:not(.charging) {
+    color: #f53c3c;
+    /* Keep red for critical errors */
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        color: @surface;
+    }
+}
+
+/* --- Text Rotation for Sidebar --- */
+#custom-vertical-text {
+    padding-top: 15px;
+    color: @on_surface;
+}
+
+/* --- Tooltips --- */
+tooltip {
+    color: @on_surface;
+    background: @surface;
+    opacity: 0.9;
+    border-radius: 15px;
+    border: 2px solid @primary;
+}
+
+tooltip label {
+    color: @on_surface;
+    padding: 5px;
+}

@@ -1,0 +1,67 @@
+/* --- Dynamic Palette Mapping --- */
+/* We use 'surface' for background and 'on_surface' for text */
+@define-color base #0f1417;
+@define-color text #dfe3e7;
+
+/* If the text is still too light, use 'on_surface_variant' or 'scrim' */
+@define-color accent #91cef4;
+@define-color selected_bg #004c6a;
+@define-color selected_text #c5e7ff;
+
+window {
+    background-color: @base;
+    border: 1px solid @accent;
+    border-radius: 12px;
+    font-family: "JetBrains Mono", "Roboto", sans-serif;
+    color: @text; /* Force global text color */
+    font-size: 14px;
+}
+
+#text {
+    margin: 5px;
+    color: @text; /* This ensures app names are readable */
+}
+
+/* --- Inner Box (Holds the list) --- */
+#inner-box {
+    margin: 5px;
+    background-color: transparent;
+}
+
+#outer-box {
+    margin: 5px;
+    padding: 10px;
+    background-color: transparent;
+}
+
+/* --- Scrollbar (Hidden in config, but styled just in case) --- */
+#scroll {
+    margin: 0px;
+    border: none;
+}
+
+#entry:selected {
+    background-color: @selected_bg;
+    border-radius: 8px;
+}
+
+#entry:selected #text {
+    color: @selected_text;
+    font-weight: bold;
+}
+
+#input {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    color: @text;
+    border: 1px solid @accent;
+    font-weight: bold;
+    background-color: #1c2024;
+}
+
+#input:focus {
+    box-shadow: none;
+    /* Remove default gtk glow */
+    outline: 1px solid @accent;
+}

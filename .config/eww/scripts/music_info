@@ -1,0 +1,116 @@
+#!/bin/bash
+
+## CONFIGURATION
+COVER="/tmp/.music_cover.jpg"
+DEFAULT_COVER="images/music.png" # Path relative to your eww config or absolute path
+
+## Check if player is running
+PLAYER_STATUS=$(playerctl --player=spotify status 2>/dev/null)
+EXIT_CODE=$?
+
+## If no player is found, return generic "Offline" data
+if [ $EXIT_CODE -ne 0 ]; then
+    if [[ "$1" == "--cover" ]]; then echo "$DEFAULT_COVER"; exit 0; fi
+    if [[ "$1" == "--status" ]]; then echo "images/icons/music/play-button.png"; exit 0; fi
+    if [[ "$1" == "--time" ]]; then echo "0"; exit 0; fi
+    if [[ "$1" == "--song" || "$1" == "--artist" ]]; then echo "Offline"; exit 0; fi
+    echo "0:00"
+    exit 0
+fi
+
+## Get status (Play/Pause Icon)
+get_status() {
+	if [[ $PLAYER_STATUS == "Playing" ]]; then
+		echo "images/icons/music/pause-button.png"
+	else
+		echo "images/icons/music/play-button.png"
+	fi
+}
+
+## Get song title
+get_song() {
+	# Uses playerctl metadata. If empty, returns "No Title"
+	playerctl --player=spotify metadata --format "{{ title }}" || echo "No Title"
+}
+
+## Get artist
+get_artist() {
+	playerctl --player=spotify metadata --format "{{ artist }}" || echo "Unknown Artist"
+}
+
+## Get time progress (Percentage 0-100)
+get_time() {
+    # Math: (Position / Length) * 100
+    # We use awk to handle the floating point math from playerctl
+    playerctl --player=spotify metadata --format "{{ position / mpris:length * 100 }}" 2>/dev/null || echo "0"
+}
+
+## Get current position (e.g. 1:23)
+get_ctime() {
+	playerctl --player=spotify position --format "{{ duration(position) }}" 2>/dev/null || echo "0:00"
+}
+
+## Get total length (e.g. 3:45)
+get_ttime() {
+	playerctl --player=spotify metadata --format "{{ duration(mpris:length) }}" 2>/dev/null || echo "0:00"
+}
+
+## Get cover art
+get_cover() {
+    # 1. Get the URL (it might be file://... or https://...)
+    ART_URL=$(playerctl --player=spotify metadata mpris:artUrl 2>/dev/null)
+
+    if [[ -z "$ART_URL" ]]; then
+        echo "$DEFAULT_COVER"
+    elif [[ "$ART_URL" == file://* ]]; then
+        # If local file, strip 'file://' and copy to temp
+        cp "${ART_URL#file://}" "$COVER"
+        echo "$COVER"
+    elif [[ "$ART_URL" == http* ]]; then
+        # If web url (Spotify/YouTube), download it
+        # We check if the image has changed to avoid re-downloading constantly
+        # (This is a simple check, ideally you store the last URL in a temp file)
+        curl -s -o "$COVER" "$ART_URL"
+        echo "$COVER"
+    else
+        echo "$DEFAULT_COVER"
+    fi
+}
+
+## Execute accordingly
+case "$1" in
+	--song)
+		get_song
+		;;
+	--artist)
+		get_artist
+		;;
+	--status)
+		get_status
+		;;
+	--time)
+		get_time
+		;;
+	--ctime)
+		get_ctime
+		;;
+	--ttime)
+		get_ttime
+		;;
+	--cover)
+		get_cover
+		;;
+	--toggle)
+		get_status
+		playerctl play-pause
+		;;
+	--next)
+		playerctl next
+        # updates cover immediately to feel snappier
+        get_cover > /dev/null 
+		;;
+	--prev)
+		playerctl previous
+        get_cover > /dev/null
+		;;
+esac

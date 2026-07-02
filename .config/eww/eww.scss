@@ -1,0 +1,111 @@
+/** Global *******************************************/
+* {
+    all: unset;
+    font-family: "JetBrains Mono", monospace;
+}
+
+/** The Main Card Container ***********************************/
+.dockbox {
+    /* The Dark Teal Background */
+    // background-color: #1A2625;
+
+    /* The Gold/Yellow Border */
+    /* border: 2px solid #D4BE98;
+    opacity: 0.9;
+
+    border-radius: 25px;
+	padding: 10px; */
+
+    /* subtle shadow for depth */
+    // box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.wallpaper-container {
+    /* The Dark Teal Background */
+    /* background-color: #1A2625; */
+
+    /* The Gold/Yellow Border */
+    /* border: 2px solid #D4BE98;
+	opacity: 0.9; */
+
+    /* border-radius: 25px;
+	padding: 10px; */
+
+    /* subtle shadow for depth */
+    // box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.wp-image {
+    /* The Dark Teal Background */
+    background-color: #1a2625;
+    background-size: cover;
+
+    /* The Gold/Yellow Border */
+    border: 1px solid #d4be98;
+    /* opacity: 0.9; */
+
+    min-height: 900px;
+    min-width: 1480px;
+
+    border-radius: 25px;
+    // padding: 10px;
+
+    /* subtle shadow for depth */
+    /* box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); */
+}
+
+/** Album Art *************************************************/
+.album_art {
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* Ensures image fills the box */
+    background-position: center;
+
+    /* Make it a square */
+    min-height: 200px;
+    min-width: 200px;
+
+    border-radius: 25px;
+    margin-bottom: 10px;
+
+    /* Inner subtle border around art */
+    // border: 1px solid rgba(212, 190, 152, 0.3);
+}
+
+/** Text Styling **********************************************/
+.musicbox {
+    margin-top: 5px;
+}
+
+.song {
+    color: #ebddaa;
+    /* Light Yellow/Cream */
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.artist {
+    color: #9da9a0;
+    /* Muted Green/Grey */
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/** Buttons ***************************************************/
+.musicbuttons {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.trackbutton,
+.playbutton {
+    color: #d4be98;
+    font-size: 24px;
+    padding: 5px;
+}
+
+.trackbutton:hover,
+.playbutton:hover {
+    color: #ffffff;
+}

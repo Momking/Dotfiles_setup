@@ -1,0 +1,51 @@
+{
+  "layer": "top",
+  "position": "left",
+  "width": 40,
+  "margin-left": 0,
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "margin-right": -19,
+  "exclusive": true,
+  "spacing": 4,
+  // Layout
+  "modules-center": ["custom/vertical-text", "wlr/taskbar"],
+  "modules-right": ["group/bottom-pill"],
+  "group/bottom-pill": {
+    "orientation": "vertical",
+    "modules": ["custom/power"],
+  },
+  "network": {
+    "interval": 1,
+    // Rotates text 90 degrees to fit vertical bar
+    // "rotate": 90,
+    // Default: Download Speed
+    "format": "{bandwidthDownBytes} ",
+    "format-wifi": "{bandwidthDownBytes} ",
+    "format-ethernet": "{bandwidthDownBytes} ",
+    // On Click: Switch to Upload Speed
+    "format-alt": "{bandwidthUpBytes} ",
+    "format-disconnected": "OFF",
+    "tooltip-format": "IP: {ipaddr}\nDown: {bandwidthDownBytes}\nUp: {bandwidthUpBytes}",
+    "class": "network-speed",
+  },
+  "custom/vertical-text": {
+    "format": "Desktop",
+    "rotate": 90,
+    "tooltip": false,
+  },
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 20,
+    "orientation": "vertical",
+    "on-click": "activate",
+    "app_ids-mapping": {
+      "btop": "btop",
+      "nvtop": "nvtop",
+    },
+  },
+  "custom/power": {
+    "format": "",
+    "on-click": "wlogout -b 6 --column 1",
+  },
+}

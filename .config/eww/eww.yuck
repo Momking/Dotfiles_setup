@@ -1,0 +1,61 @@
+;; ** Variables ***********************************************************************
+
+;; Music vars
+(defpoll SONG :interval "1s" `scripts/music_info --song`)
+(defpoll ARTIST :interval "1s" `scripts/music_info --artist`)
+(defpoll COVER :interval "1s" `scripts/music_info --cover`)
+(defpoll STATUS :interval "1s" `scripts/music_info --status`)
+
+;; Wallpaper vars
+(defvar current_wallpaper "/home/nishant/Downloads/Wallpaper/A_Aham.jpg")
+
+;; ** Widgets *************************************************************************
+
+;; Music Widget
+(defwidget music []
+  (box :class "dockbox"
+       :orientation "v"           ;; CHANGED to Vertical
+       :space-evenly false
+       :spacing 1
+       :halign "center"
+
+    ;; Album Art (Large Box)
+    (box :class "album_art"
+         :style "background-image: url('${COVER}');")
+  )
+)
+
+;; Wallpaper Widget
+(defwidget wallpaper []
+  (box :class "wallpaper-container" :orientation "v" :space-evenly false
+    (box :class "wp-image"
+         :style "background-image: url('${current_wallpaper}');"
+         :preserve-aspect-ratio true)
+    )
+)
+
+;; ** Windows *************************************************************************
+
+;; Music Window
+(defwindow music
+    :monitor 0
+    ;; Changed Geometry to be a Card (300x350) instead of a Bar
+    :geometry (geometry :x "0px"
+                        :y "10px"
+                        :width "220px"
+                        :height "350px"
+                        :anchor "top right")
+    :stacking "bg"
+    :exclusive false
+    (music)
+)
+
+;; Wallpaper Window
+(defwindow wallpaper
+    :monitor 0
+    :geometry (geometry :x "230px" :y "60px" :anchor "top right")
+    :stacking "bg"
+    :windowtype "desktop"
+    :exclusive false
+    (wallpaper)
+)

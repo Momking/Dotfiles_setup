@@ -1,0 +1,27 @@
+# /home/USER/.config/wofi/config
+
+# --- General ---
+term=ghostty
+mode=drun
+show=drun
+prompt=Apps
+columns=2
+width=650
+height=450
+location=center
+
+# --- Functionality ---
+allow_images=true
+image_size=24
+insensitive=true
+run-always_parse_args=true
+run-cache_file=/dev/null
+run-exec_search=true
+
+# --- Appearance tweaks ---
+# Hide the scrollbar for a cleaner look
+hide_scroll=true
+# Fix for some window managers preventing it from staying open
+normal_window=true
+# Disable the "actions" drop-down menu that can look messy
+no_actions=true

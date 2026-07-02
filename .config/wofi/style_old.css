@@ -1,0 +1,77 @@
+/* /home/USER/.config/wofi/style.css */
+
+/* --- Catppuccin Mocha Palette --- */
+@define-color base #1e1e2e;
+@define-color mantle #181825;
+@define-color crust #11111b;
+@define-color text #cdd6f4;
+@define-color subtext #a6adc8;
+@define-color accent #89b4fa;
+/* Blue accent */
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+
+/* --- Main Window --- */
+window {
+    background-color: @base;
+    border: 2px solid @accent;
+    border-radius: 12px;
+    font-family: "JetBrains Mono", "Roboto", sans-serif;
+    /* Adjust to your font */
+    font-size: 14px;
+}
+
+/* --- Search Bar --- */
+#input {
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: @surface0;
+    color: @text;
+    font-weight: bold;
+}
+
+/* Focus highlighting for the search bar */
+#input:focus {
+    box-shadow: none;
+    /* Remove default gtk glow */
+    outline: 2px solid @accent;
+}
+
+/* --- Inner Box (Holds the list) --- */
+#inner-box {
+    margin: 5px;
+    background-color: transparent;
+}
+
+#outer-box {
+    margin: 5px;
+    padding: 10px;
+    background-color: transparent;
+}
+
+/* --- Scrollbar (Hidden in config, but styled just in case) --- */
+#scroll {
+    margin: 0px;
+    border: none;
+}
+
+/* --- The Text Entries --- */
+#text {
+    margin: 5px;
+    color: @text;
+}
+
+/* The selected entry */
+#entry:selected {
+    background-color: @surface1;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* Selected text color */
+#entry:selected #text {
+    color: @accent;
+    font-weight: bold;
+}
