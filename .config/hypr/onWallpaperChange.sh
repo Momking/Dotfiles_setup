@@ -11,7 +11,7 @@ EWW_BIN="eww"
 CFG="$HOME/.config/eww/"
 WIDGET_WALLPAPER="wallpaper"
 
-# 1. Start swww-daemon if not running (Instead of hyprpaper)
+# 1. Start swww-daemon if not running
 if ! pgrep -x "swww-daemon" > /dev/null; then
     swww-daemon &
     sleep 1
@@ -33,14 +33,9 @@ fi
 # 3. Set the wallpaper using swww
 swww img "$BLURRED_IMG" --transition-type grow --transition-pos 0.5,0.5 --transition-fps 60 --transition-step 20
 
-# Example: Send a notification showing the path
 $EWW_BIN --config "$CFG" update current_wallpaper="$WALLPAPER_PATH"
 
 # Cleanup old blurred image (optional, to save space in /tmp)
 # rm "$BLURRED_IMG"
 
 matugen image "$WALLPAPER_PATH" --prefer=darkness
-
-pywalfox update
-# Example: Do something else with the path (like processing it with another tool)
-# my-other-tool "$WALLPAPER_PATH"
