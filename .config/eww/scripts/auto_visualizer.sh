@@ -5,7 +5,6 @@
 EWW_BIN="eww"
 CFG="$HOME/.config/eww/"
 
-# The specific name of the window in eww.yuck
 WIDGET="music"
 
 # Check interval in seconds

@@ -2,7 +2,7 @@
 
 ## CONFIGURATION
 COVER="/tmp/.music_cover.jpg"
-DEFAULT_COVER="images/music.png" # Path relative to your eww config or absolute path
+DEFAULT_COVER="images/music.png" # Path relative to eww config or absolute path
 
 ## Check if player is running
 PLAYER_STATUS=$(playerctl --player=spotify status 2>/dev/null)
@@ -41,16 +41,15 @@ get_artist() {
 ## Get time progress (Percentage 0-100)
 get_time() {
     # Math: (Position / Length) * 100
-    # We use awk to handle the floating point math from playerctl
     playerctl --player=spotify metadata --format "{{ position / mpris:length * 100 }}" 2>/dev/null || echo "0"
 }
 
-## Get current position (e.g. 1:23)
+## Get current position
 get_ctime() {
 	playerctl --player=spotify position --format "{{ duration(position) }}" 2>/dev/null || echo "0:00"
 }
 
-## Get total length (e.g. 3:45)
+## Get total length
 get_ttime() {
 	playerctl --player=spotify metadata --format "{{ duration(mpris:length) }}" 2>/dev/null || echo "0:00"
 }
@@ -69,7 +68,6 @@ get_cover() {
     elif [[ "$ART_URL" == http* ]]; then
         # If web url (Spotify/YouTube), download it
         # We check if the image has changed to avoid re-downloading constantly
-        # (This is a simple check, ideally you store the last URL in a temp file)
         curl -s -o "$COVER" "$ART_URL"
         echo "$COVER"
     else
