@@ -138,6 +138,8 @@ Used for wallpaper-based dynamic color generation.
 ### Linux Desktop Gremlin
 
 Integrated with the desktop through the included scripts and Niri keybindings.
+Its an external utility that provides a desktop gremlin interface.
+You can find here: [`Gremlin`](https://github.com/iluvgirlswithglasses/linux-desktop-gremlin)
 
 ### Neovim
 
