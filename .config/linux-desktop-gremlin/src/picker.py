@@ -8,6 +8,24 @@ from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QIcon
 from PySide6.QtMultimedia import QMediaDevices, QAudioDevice
+from pathlib import Path
+
+# Import path resolution logic
+import sys
+import os
+
+# Ensure project root is in path so we can import 'src' package
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+try:
+    from src.configs_loader import GREMLIN_DIRS, _resolve_char_path, ResourceType
+    from src.asset_downloader_gui import AssetDownloaderGui
+except ImportError:
+    # Fallback if running from root as 'python -m src.picker'
+    from .configs_loader import GREMLIN_DIRS, _resolve_char_path, ResourceType
+    from .asset_downloader_gui import AssetDownloaderGui
 
 # =================================================================================
 # CLASS: SettingsDialog (Global Config)
@@ -66,6 +84,18 @@ class SettingsDialog(QDialog):
         self.volume_spin.setSingleStep(0.1)
         self.volume_spin.setValue(self.config_data.get("Volume", 0.8))
 
+        self.scale_spin = QDoubleSpinBox()
+        self.scale_spin.setRange(0.1, 5.0)
+        self.scale_spin.setSingleStep(0.1)
+        self.scale_spin.setValue(self.config_data.get("Scale", 1.0))
+        self.scale_spin.setToolTip("Scale the gremlin size (e.g. 0.5 = half size, 2.0 = double size).")
+
+        self.anim_speed_spin = QDoubleSpinBox()
+        self.anim_speed_spin.setRange(0.1, 5.0)
+        self.anim_speed_spin.setSingleStep(0.1)
+        self.anim_speed_spin.setValue(self.config_data.get("AnimationSpeed", 1.0))
+        self.anim_speed_spin.setToolTip("Adjust animation playback speed (e.g. 0.5 = slower, 2.0 = faster).")
+
         # Add to form
         form_layout.addRow("Default Character:", self.starting_char_combo)
         form_layout.addRow("Enable System Tray:", self.systray_check)
@@ -73,6 +103,8 @@ class SettingsDialog(QDialog):
         form_layout.addRow("Emote Key (e.g., P):", self.emote_key_input)
         form_layout.addRow("Audio Output:", self.audio_device_combo)
         form_layout.addRow("Volume (0.0 - 1.0):", self.volume_spin)
+        form_layout.addRow("Global Scale:", self.scale_spin)
+        form_layout.addRow("Animation Speed:", self.anim_speed_spin)
         
         layout.addLayout(form_layout)
         
@@ -124,13 +156,23 @@ class SettingsDialog(QDialog):
         self.setStyleSheet(style)
 
     def populate_chars(self):
+        found_chars = set()
+        
+        # 1. Check Bundled Gremlin Dirs
+        for directory in GREMLIN_DIRS:
+            if directory.exists():
+                for item in directory.iterdir():
+                    if item.is_dir():
+                        found_chars.add(item.name)
+
+        # 2. Check Legacy Spritesheet Dir
         spritesheet_dir = os.path.join(self.project_root, "spritesheet")
         if os.path.exists(spritesheet_dir):
-            gremlins = sorted([
-                d for d in os.listdir(spritesheet_dir) 
-                if os.path.isdir(os.path.join(spritesheet_dir, d))
-            ])
-            self.starting_char_combo.addItems(gremlins)
+            for d in os.listdir(spritesheet_dir):
+                if os.path.isdir(os.path.join(spritesheet_dir, d)):
+                    found_chars.add(d)
+        
+        self.starting_char_combo.addItems(sorted(list(found_chars)))
 
     def load_config(self):
         if os.path.exists(self.config_path):
@@ -149,6 +191,8 @@ class SettingsDialog(QDialog):
         self.emote_key_input.setText("P")
         self.audio_device_combo.setCurrentIndex(0) # Default
         self.volume_spin.setValue(0.8)
+        self.scale_spin.setValue(1.0)
+        self.anim_speed_spin.setValue(1.0)
         
         # Reset default character to Mambo
         index = self.starting_char_combo.findText("mambo", Qt.MatchFixedString)
@@ -162,6 +206,8 @@ class SettingsDialog(QDialog):
         self.config_data["EmoteKey"] = self.emote_key_input.text().upper()
         self.config_data["AudioDevice"] = self.audio_device_combo.currentText()
         self.config_data["Volume"] = self.volume_spin.value()
+        self.config_data["Scale"] = self.scale_spin.value()
+        self.config_data["AnimationSpeed"] = self.anim_speed_spin.value()
 
         try:
             with open(self.config_path, 'w') as f:
@@ -179,7 +225,14 @@ class EmoteConfigDialog(QDialog):
         self.setWindowTitle(f"Emote Config: {character_name}")
         self.setFixedSize(400, 300)
         self.character_name = character_name
-        self.config_path = os.path.join(project_root, "spritesheet", character_name, "emote-config.json")
+        
+        # Use new resolution logic
+        root_path, is_bundled = _resolve_char_path(character_name)
+        if is_bundled:
+            self.config_path = str(root_path / "sprites" / "emote-config.json")
+        else:
+            self.config_path = os.path.join(project_root, "spritesheet", character_name, "emote-config.json")
+            
         self.config_data = {}
 
         layout = QVBoxLayout(self)
@@ -337,6 +390,19 @@ class GremlinPicker(QWidget):
         self.launch_btn.clicked.connect(self.launch_gremlin)
         self.launch_btn.setCursor(Qt.PointingHandCursor)
         
+        self.download_btn = QPushButton("Download Gremlin")
+        self.download_btn.clicked.connect(self.open_downloader)
+        self.download_btn.setCursor(Qt.PointingHandCursor)
+        self.download_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #2e7d32;
+                color: white;
+            }
+            QPushButton:hover {
+                background-color: #388e3c;
+            }
+        """)
+        
         self.settings_btn = QPushButton("Config")
         self.settings_btn.clicked.connect(self.open_settings)
         self.settings_btn.setCursor(Qt.PointingHandCursor)
@@ -351,6 +417,7 @@ class GremlinPicker(QWidget):
         """)
 
         btn_layout.addWidget(self.launch_btn, stretch=2)
+        btn_layout.addWidget(self.download_btn, stretch=1)
         btn_layout.addWidget(self.settings_btn, stretch=1)
         left_layout.addLayout(btn_layout)
         
@@ -404,8 +471,22 @@ class GremlinPicker(QWidget):
         dialog.exec()
 
     def populate_list(self):
-        spritesheet_dir = os.path.join(self.project_root, "spritesheet")
+        found_chars = set()
         
+        # 1. Check Bundled Gremlin Dirs
+        for directory in GREMLIN_DIRS:
+            if directory.exists():
+                for item in directory.iterdir():
+                    if item.is_dir():
+                        found_chars.add(item.name)
+
+        # 2. Check Legacy Spritesheet Dir
+        spritesheet_dir = os.path.join(self.project_root, "spritesheet")
+        if os.path.exists(spritesheet_dir):
+            for d in os.listdir(spritesheet_dir):
+                if os.path.isdir(os.path.join(spritesheet_dir, d)):
+                    found_chars.add(d)
+
         # Load config to find default char
         default_char = ""
         if os.path.exists(self.config_path):
@@ -416,20 +497,15 @@ class GremlinPicker(QWidget):
             except:
                 pass
 
-        if os.path.exists(spritesheet_dir):
-            gremlins = sorted([
-                d for d in os.listdir(spritesheet_dir) 
-                if os.path.isdir(os.path.join(spritesheet_dir, d))
-            ])
-            for g in gremlins:
-                item = self.list_widget.addItem(g)
-                # Select if it matches default
-                if g == default_char:
-                    # We need to find the item we just added to select it
-                    # QListWidget.addItem returns None in PySide6 usually, so we access by row
-                    row = self.list_widget.count() - 1
-                    self.list_widget.setCurrentRow(row)
-                    self.update_preview(default_char)
+        for g in sorted(list(found_chars)):
+            item = self.list_widget.addItem(g)
+            # Select if it matches default
+            if g == default_char:
+                # We need to find the item we just added to select it
+                # QListWidget.addItem returns None in PySide6 usually, so we access by row
+                row = self.list_widget.count() - 1
+                self.list_widget.setCurrentRow(row)
+                self.update_preview(default_char)
                 
     def on_selection_changed(self, current, previous):
         if not current:
@@ -439,10 +515,17 @@ class GremlinPicker(QWidget):
         self.update_preview(name)
 
     def update_preview(self, name):
-        base_path = os.path.join(self.project_root, "spritesheet", name)
-        config_path = os.path.join(base_path, "sprite-map.json")
+        # Use new resolution logic
+        root_path, is_bundled = _resolve_char_path(name)
         
-        if not os.path.exists(config_path):
+        if is_bundled:
+             config_path = root_path / "sprites" / "sprite-map.json"
+             base_img_path = root_path / "sprites"
+        else:
+             config_path = Path(self.project_root) / "spritesheet" / name / "sprite-map.json"
+             base_img_path = Path(self.project_root) / "spritesheet" / name
+        
+        if not config_path.exists():
             self.preview_label.setText("No config found")
             self.preview_label.setPixmap(QPixmap())
             return
@@ -461,13 +544,13 @@ class GremlinPicker(QWidget):
                  self.preview_label.setText("No idle image defined")
                  return
 
-            image_path = os.path.join(base_path, image_name)
-            if not os.path.exists(image_path):
+            image_path = base_img_path / image_name
+            if not image_path.exists():
                 self.preview_label.setText("Image file missing")
                 return
 
             # Load and crop
-            full_pixmap = QPixmap(image_path)
+            full_pixmap = QPixmap(str(image_path))
             if full_pixmap.isNull():
                 self.preview_label.setText("Failed to load image")
                 return
@@ -501,6 +584,13 @@ class GremlinPicker(QWidget):
     def open_settings(self):
         dialog = SettingsDialog(self.project_root, self)
         dialog.exec()
+
+    def open_downloader(self):
+        dialog = AssetDownloaderGui(self)
+        dialog.exec()
+        # Refresh list after download
+        self.list_widget.clear()
+        self.populate_list()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -10,6 +10,8 @@ class Preferences:
     MoveSpeed: int = 5
     Volume: float = 0.8
     AudioDevice: str = "Default"
+    Scale: float = 1.0
+    AnimationSpeed: float = 1.0
     EmoteKeyEnabled: bool = True
     EmoteKey: str = "P"
     IdleMinutes: int = 5  # minutes

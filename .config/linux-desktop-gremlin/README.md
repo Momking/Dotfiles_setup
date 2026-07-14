@@ -7,222 +7,91 @@ https://github.com/user-attachments/assets/eeb75510-9725-4f3a-a259-0959ddc22603
 
 💥 Features 💥
 
-- Works on both X11 (with picom) and Hyprland (with XWayland).
+- Works on X11 (with picom), Hyprland (with XWayland) and Niri (with Wayland).
 - Also works on Windows and MacOS (follow the manual installation guide).
 - Interactive controls:
     - **Drag & Drop:** 🖱️ Click and drag your gremlins to move 'em.
-    - **Walk**: ⌨️ ~Cursor-following does not work in Wayland 🥺🥺🥺~. So hover your mouse over the gremlins, then use W/A/S/D to make 'em skedaddle 💨💨.
-    - **Secret Move:** Right-click to see what happens 😎. Pro tip: *where* you right-click matters! A headpat, a poke, (or something even more special) might play!
+    - **Walk**: ⌨️ Hover your mouse over the gremlins, then use W/A/S/D to make 'em skedaddle 💨💨.
+    - **Secret Moves:** Right-click on different spots to play special animations 😎! It might be a headpat, a poke, or something even more special!
 - Also, if you leave the gremlins lonely for so long, they will occasionally make more ✨noises✨ to annoy you 😈😈. Think of it as *"1 hour of silence occasionally broken up by Mambo"*.
 
-> Note 1: The *"1 hour of silence occasionally broken up by Mambo"* feature can be turned off (if you are a chicken 🐔🐔). See the "Customize your Gremlins!" section below.
->
-> Note 2: It seems that the "Cursor-following does not work in Wayland" statement of mine was, in fact, a skill issue 😩😩.
+> Note: The *"1 hour of silence occasionally broken up by Mambo"* feature can be turned off (if you are a chicken 🐔🐔). See [Customizations](./docs/05-customize.md).
+
+# Install and customize! 🚀
+
+## 1. Quick Guide
+
+1. Run install script:
+
+```sh
+curl -s https://raw.githubusercontent.com/iluvgirlswithglasses/linux-desktop-gremlin/refs/heads/main/install.sh | bash
+```
+
+2. Call the gremlins from your app launcher!
+
+<img width="1003" height="500" alt="ss-app_launcher" src="https://github.com/user-attachments/assets/fee960dc-c983-424d-8649-23c4b40d1293" />
+
+## 2. Extended Guide
+
+Wanna tweak details, or install on a setup where the install script can't automate everything? Follow these steps to get your gremlins up and running exactly the way you want:
+
++ [1. Configure your compositor](./docs/01-configure-compositor.md)
++ [2. Install this repository](./docs/02-install.md)
++ [3. Choose your gremlins!](./docs/03-download-gremlin-assets.md)
++ [4. Run desktop gremlins!](./docs/04-run.md)
++ [5. Customizations](./docs/05-customize.md)
++ [6. Create your gremlins!](./docs/06-create-your-gremlins.md)
 
 # Changelog
+
+- **2026-02-08 Breaking Change: Assets have been moved to release tags!** If you have cloned this repo earlier than that, please see [Migration Guide](./docs/migrate-to-v1.0.0.md) to avoid re-downloading the assets after `git pull`. Also, take a look at the [New Downloader](./docs/03-download-gremlin-assets.md)! It helps downloading new gremlin assets with ease!
+
+<details>
+    <summary>See 2025 changelog</summary>
 
 - 2026-01-15: Refactored the entire codebase for modularity and strict type-check. Some behaviors have changed, some are intentional, some are bugs.
 - 2026-01-14: Added Qt6 character selector GUI! Huge thanks to [@Multex](https://github.com/Multex)!
 - 2025-11-18: Massive source code restructure! We now have a unified run script and a package recipe for Guix. (Huge thanks to [@thanosapollo](https://github.com/thanosapollo)! This chad is a much better programmer than I am.)
 - 2025-11-16: Added a manual trigger for the annoy emote. Press `P` to make them noisy on command.
 - 2025-11-15: Remapped headpats from Left Click to Right Click. No more accidental pats when you want to drag them around!
+</details>
 
 # Some differences between this and KurtVelasco's Desktop Gremlins
 
 This is not a strict 1:1 port, because I made some changes to the animation flow to better match my own preferences. I also created a few additional spritesheets; please feel free to use them if they're helpful.
 
-Furthermore, for anyone who wants to add or change the animation logic: Check out the `animation_tick` method in `gremlin.py`. Unlike KurtVelasco's original code, this version uses a more traditional Finite State Machine design, so it should make the logic easier to follow and extend. There's still plenty of room for improvement, though. I'll come back to polishing the code after I finish adding the animations I have in mind.
+# The Gremlin Hall of Fame ❤️
 
-# ⚙ How to Install and Run (Automatically)
+Starting 2026-02-08, assets have been move to release tags, which means contributors who submit assets via PRs would no longer appear in the GitHub contributors list 😢.
 
-## 1. Configure your Compositor
+Therefore, if you'd like to contribute a new gremlin, please make two Pull Requests:
+1. **The Asset PR:** Submit your new asset to the `./gremlins` directory. This PR won't be merged, but it'll send me the asset.
+2. **The Credit PR:** Add yourself to the glorious table below so the world knows of your deeds!
 
-To make the gremlin's background transparent, your compositor must be configured correctly. Unfortunately, this is not something that can really be automated. So, before you install, please follow these guides for X11 desktops and Hyprland:
+| Gremlin Asset         | Contributor                                                   |
+| :-------------------- | :------------------------------------------------------------ |
+| Agnes Tachyon         | [@TRKako](https://github.com/TRKako)                          |
+| Manhattan Cafe        | [@TRKako](https://github.com/TRKako)                          |
+| Calstone Light        | [@virtualspan](https://github.com/virtualspan)                |
+| Dream Journey         | [@virtualspan](https://github.com/virtualspan)                |
+| Durandal              | [@virtualspan](https://github.com/virtualspan)                |
+| Gold Ship             | [@TRKako](https://github.com/TRKako)                          |
+| Haru Urara            | [@TRKako](https://github.com/TRKako)                          |
+| Meisho Doto           | [@TRKako](https://github.com/TRKako)                          |
+| Oguri Cap             | [@TRKako](https://github.com/TRKako)                          |
+| T.M. Opera O          | [@TRKako](https://github.com/TRKako)                          |
+| Stay Gold             | [@virtualspan](https://github.com/virtualspan)                |
+| Tamamo Cross          | [@virtualspan](https://github.com/virtualspan)                |
+| Tachibana Hikari      | [@Xgameisdabest](https://github.com/Xgameisdabest)            |
+| Kurosaki Koyuki       | [@Xgameisdabest](https://github.com/Xgameisdabest)            |
+| Exusiai               | [@virtualspan](https://github.com/virtualspan)                |
+| Exusiai (with gun)    | [@virtualspan](https://github.com/virtualspan)                |
+| Speaki                | [@Quicksilver151](https://github.com/Quicksilver151)          |
 
-<details>
-  <summary>For X11 (e.g., i3, bspwm, etc.)</summary>
+A massive, heartfelt thank you to our incredible asset contributors!
 
-  Install `picom` and have it executed on startup is enough. For example, you may install it via:
-
-  ```sh
-  sudo apt install picom  # for Debian/Ubuntu based distros
-  yay -S picom            # for AUR users
-  ```
-
-  Then, add the following line into your `~/.xinitrc` or equivalent startup script:
-
-  ```sh
-  picom &
-  ```
-</details>
-
-<details>
-  <summary>For Hyprland</summary>
-
-  Firstly, you need `xwayland`. Since you're using Hyprland, I suspect you have it already. But if you don't, please install it with this command (or any of its equivalent):
-
-  ```sh
-  yay -S xorg-xwayland
-  ```
-
-  Then, add the following rules into your `~/.config/hypr/hyprland.conf`:
-
-  ```conf
-  windowrule {
-  name = linux-gremlin
-  no_blur = on
-  no_shadow = on
-  border_size = 0
-  match:title = ilgwg_desktop_gremlins.py
-  }
-  ```
-</details>
-
-<details>
-  <summary>For Niri</summary>
-
-  Add the following window rules:
-
-  ```conf
-  window-rule {
-      match title="ilgwg_desktop_gremlins.py"
-      draw-border-with-background false
-      opacity 0.99
-      focus-ring {
-          off
-      }
-      border {
-          // Same as focus-ring.
-      }
-      shadow {
-          off
-      }
-  }
-  ```
-</details>
-
-## 2. Run the installation script
-
-Just run the following script, and it will take care of the rest:
-
-```sh
-# this will install to ~/.config/linux-desktop-gremlin/
-curl -s https://raw.githubusercontent.com/iluvgirlswithglasses/linux-desktop-gremlin/refs/heads/main/install.sh | bash
-```
-
-It is recommended that you check the content of the script before running.
-
-## 3. Run Desktop Gremins!
-
-Once installed, you can find **Gremlin Picker** in your application menu (or app launcher like Rofi/Wofi/Fuzzel). Just search for "Gremlin" and launch it!
-
-Alternatively, you can run the picker from the terminal:
-
-```sh
-./scripts/gremlin-picker.sh
-```
-
-![App Launcher](images/ss-app_launcher.png)
-
-Otherwise, you can navigate to `~/.config/linux-desktop-gremlin/` and execute the run script directly:
-
-```sh
-./run.sh                    # to spawn the default character (specified in ./config.json)
-./run.sh <character-name>   # to spawn any character who is available in ./spritesheet/
-
-# You can now close the terminal which you executed these scripts with.
-# The gremlin won't be despawned unless you use your hotkeys for closing window,
-# like alt+f4 or mod+q.
-```
-
-# ⚙ How to Install and Run (Manually)
-
-## 1. Install Dependencies
-
-You can install dependencies either in a Python virtual environment or using your system's package manager.
-
-<details>
-  <summary>Method A: Virtual Environment (Recommended)</summary>
-
-  There's nothing that can go wrong about this, except for the disk space. This also works on Windows and MacOS.
-
-  ```sh
-  # clone repository
-  git clone https://github.com/iluvgirlswithglasses/linux-desktop-gremlin
-  cd linux-desktop-gremlin
-
-  # install uv -- a fast Python package manager -- then sync packages
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  uv sync
-  ```
-</details>
-
-<details>
-  <summary>Method B: System Package Manager</summary>
-
-  This method uses your distribution's packages to save disk space. You will need PySide6 and its Qt6 dependencies.
-
-  ```sh
-  # Example for Arch Linux
-  yay -S pyside6 qt6-base
-  ```
-</details>
-
-## 2. Run Linux Desktop Gremlins
-
-Execute one of these run scripts, then a gremlin shall be spawned:
-
-```sh
-./run.sh                    # to spawn the default character (specified in ./config.json)
-./run.sh <character-name>   # to spawn any character who is available in ./spritesheet/
-./scripts/gremlin-picker.sh # to use the visual picker GUI
-
-# You can now close the terminal which you executed these scripts with.
-# The gremlin won't be despawned unless you use your hotkeys for closing window,
-# like alt+f4 or mod+q.
-```
-
-You would also need to configure your compositor correctly so that the gremlins have fully transparent background. Refer to section "How to Install and Run (Automatically)" > "1. Configure your Compositor".
-
-# 🔧 Customizations!
-
-https://github.com/user-attachments/assets/26e2a3b0-4fde-4a3a-926f-ad9f1e1cfb07
-
-## How to Make Your Gremlin Annoy You (Occasionally!)
-
-Do you want the gremlins to annoy you at random time or not? 😜
-
-To control this, open `./spritesheet/<character>/emote-config.json`. You'll see:
-
-```json
-{
-    "AnnoyEmote": true,
-    "MinEmoteTriggerMinutes": 5,
-    "MaxEmoteTriggerMinutes": 15,
-    "EmoteDuration": 3600
-}
-```
-
-If you set `AnnoyEmote` to `false`, then nothing happens. If you set it to `true`, however:
-- If the gremlin goes without any *"caring interactions"* (no pats, no drags, no clicks,...) they will get bored 😢.
-- If you leave them bored for a while (a random time between `MinEmoteTriggerMinutes` and `MaxEmoteTriggerMinutes`), they will suddenly play a special emote (with sound!) all by themselves 😙😙.
-- The emote will last for the number of milliseconds set in `EmoteDuration`.
-  - *(Note: For now, this duration only affects the animation, not the sound effect, sorry 😢.)*
-
-You can also trigger this animation by hovering over the gremlin and press "P". You can customize this key too, just take a look at `./config.json`.
-
-## How to Enable or Disable the System Tray
-
-This program's systray is disabled by default, and you won't lose any functionality by disabling the systray either. However, if you need it, you might enable it by modifying the `Systray` field in `./config.json` to `true`.
-
-## Try other forks!
+# Try other forks!
 
 There are some forks of this repository that you may want to checkout!
 
 - [#23](https://github.com/iluvgirlswithglasses/linux-desktop-gremlin/pull/23): Significantly reduces memory usage of the app, though some functionalities will be different.
-
-# 🚀 Stay Tuned!
-
-I'll be adding more characters as soon as my full-time job and university decide to give me a break.
-
-Also, got a cool spritesheet you're dying to see running on your desktop? Feel free to open an issue on GitHub and share! Thank you!
